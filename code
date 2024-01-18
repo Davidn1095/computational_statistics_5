@@ -1,0 +1,41 @@
+## Fuel Consumption Analysis by Manufacturer
+
+This R script performs an analysis of fuel consumption data from different manufacturers. It includes data creation, exploratory data analysis using a boxplot, and hypothesis testing using ANOVA.
+
+```R
+# Data creation
+
+# Manufacturers data
+fabricante <- rep(c("A", "B", "C", "D"), each = 9)
+
+# Consumption data
+consumo <- c(
+  9.3, 8.9, 8.7, 9.1, 8.6, 9.1, 9.6, 9.7, 9.0,
+  9.1, 8.3, 8.2, 9.0, 9.1, 8.3, 8.8, 8.0, 9.0,
+  9.8, 10.4, 9.2, 9.7, 10.4, 8.9, 8.8, 9.7, 9.5,
+  8.6, 8.9, 8.1, 7.8, 9.1, 8.0, 8.4, 8.1, 8.8
+)
+
+# Create a dataframe
+df <- data.frame(Fabricante = fabricante, Consumo = consumo)
+
+# Exploratory boxplot graph
+boxplot(Consumo ~ Fabricante, data = df, col = "lightblue", 
+        main = "Consumo de Combustible por Fabricante")
+
+# Hypothesis testing - ANOVA
+
+# Null Hypothesis: No significant difference between manufacturers
+# Alternative Hypothesis: At least one significant difference between manufacturers
+modelo_anova <- aov(Consumo ~ Fabricante, data = df)
+res_anova <- summary(modelo_anova)
+p_valor <- res_anova[[1]]$`Pr(>F)`[1]
+
+# Decision making based on p-value
+if (p_valor < 0.05) {
+  cat("El p-valor es", p_valor, "y se rechaza la hipótesis nula.\n")
+  cat("Hay evidencia de al menos una diferencia significativa entre los fabricantes.\n")
+} else {
+  cat("El p-valor es", p_valor, "y no se rechaza la hipótesis nula.\n")
+  cat("No hay evidencia de diferencia significativa entre los fabricantes.\n")
+}
